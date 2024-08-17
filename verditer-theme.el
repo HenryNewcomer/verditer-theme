@@ -64,9 +64,36 @@
 (defvar color-minibuffer-prompt "#00a1ff")
 (defvar color-consquotest "#825fab")
 
-;; Comment colors
-(defvar color-comment-symbols "#CE6747")
-(defvar color-comment-text "#44ADC0")
+;; Comment colors (start)
+(defvar color-comment-symbols "#448DC8")
+(defvar color-comment-text "#448DC8")
+
+;; Define custom faces
+(defface my-comment-symbol-face
+  `((t (:foreground ,color-comment-symbols :weight bold)))
+  "Face for comment symbols like // or ;")
+
+(defface my-comment-text-face
+  `((t (:foreground ,color-comment-text)))
+  "Face for the text content of comments")
+
+;; Set up font-lock keywords
+(font-lock-add-keywords
+ nil
+ '(("\\(^\\s-*\\(//\\|;+\\)\\)" 1 'my-comment-symbol-face)  ; Comment start symbols
+   ("\\(//\\|;+\\).*$" 0 'my-comment-text-face keep)))  ; Comment text
+
+;; Modify the default comment face more conservatively
+(set-face-attribute 'font-lock-comment-face nil
+                    :foreground color-comment-text
+                    :inherit nil)  ; Prevent inheritance that might cause issues
+
+;; If you still want to modify the comment delimiter face
+(set-face-attribute 'font-lock-comment-delimiter-face nil
+                    :foreground color-comment-symbols
+                    :weight 'bold
+                    :inherit nil)
+;; Comment colors (stop)
 
 ;; Mode line colors
 (defvar color-mode-line-bg "#0c0f15")
@@ -116,6 +143,16 @@
 (defvar color-moderation "#ffa502")
 (defvar color-supervision "#1e90ff")
 
+;; Add these color definitions
+(defvar color-org-level1 "#5cffbe")
+(defvar color-org-level2 "#43a9ca")
+(defvar color-org-level3 "#3eb5ff")
+(defvar color-org-level4 "#00a8ff")
+(defvar color-org-level5 "#b1e1ff")
+(defvar color-org-level6 "#33ffff")
+(defvar color-org-level7 "#2ed573")
+(defvar color-org-level8 "#9eedc7")
+
 (custom-theme-set-faces
  'verditer
  `(default ((t (:foreground ,color-fg :background ,color-bg))))
@@ -127,11 +164,6 @@
  `(fringe ((t (:background ,color-fringe))))
  `(vertical-border ((t (:foreground ,color-vertical-line))))
  `(border ((t (:background ,color-fringe :foreground ,color-vertical-line))))
- `(mode-line ((t (:foreground ,color-mode-line-fg :background ,color-mode-line-bg :box (:line-width 1 :color ,color-vertical-line)))))
- `(mode-line-inactive ((t (:foreground ,color-fg-alt :background ,color-bg-2 :box (:line-width 1 :color ,color-vertical-line)))))
- `(mode-line-buffer-id ((t (:foreground ,color-main :weight bold))))
- `(mode-line-emphasis ((t (:foreground ,color-warning))))
- `(mode-line-highlight ((t (:foreground ,color-bg :background ,color-main))))
  `(success ((t (:foreground ,color-main :weight bold))))
  `(warning ((t (:foreground ,color-warning :weight bold))))
  `(error ((t (:foreground ,color-error :weight bold))))
@@ -162,6 +194,13 @@
 
  ;; Button faces
  `(button ((t (:foreground ,color-link-normal :underline t))))
+
+ ;; Diff colorings
+ `(diff-added ((t (:foreground ,color-add-fg :background ,color-add-bg))))
+ `(diff-removed ((t (:foreground ,color-remove-fg :background ,color-remove-bg))))
+ `(diff-context ((t (:foreground ,color-fg))))
+ `(diff-file-header ((t (:foreground ,color-keyword :weight bold))))
+ `(diff-hunk-header ((t (:foreground ,color-consquotest :weight bold))))
 
  ;; ido faces
  `(ido-first-match ((t (:foreground ,color-main :weight bold))))
@@ -231,21 +270,43 @@
  `(erc-input-face ((t (:foreground ,color-fg))))
  `(erc-timestamp-face ((t (:foreground ,color-bg-2 :weight bold))))
 
- ;; org-mode
- `(org-level-1 ((t (:foreground ,color-gradient2 :weight bold :height 1.1))))
- `(org-level-2 ((t (:foreground ,color-gradient1 :weight bold))))
- `(org-level-3 ((t (:foreground ,color-gradient0 :weight bold))))
- `(org-level-4 ((t (:foreground ,color-gradient3 :weight bold))))
- `(org-level-5 ((t (:foreground ,color-gradient4 :weight bold))))
- `(org-level-6 ((t (:foreground ,color-gradient5 :weight bold))))
+ ;; Mode line
+ `(mode-line ((t (:foreground ,color-mode-line-fg :background ,color-mode-line-bg :box (:line-width 1 :color ,color-vertical-line)))))
+ `(mode-line-inactive ((t (:foreground ,color-fg-alt :background ,color-bg-2 :box (:line-width 1 :color ,color-vertical-line)))))
+ `(mode-line-buffer-id ((t (:foreground ,color-main :weight bold))))
+ `(mode-line-emphasis ((t (:foreground ,color-warning))))
+ `(mode-line-highlight ((t (:foreground ,color-bg :background ,color-main))))
+
+ ;; Org Mode
+ `(org-level-1 ((t (:foreground ,color-org-level1 :weight bold :height 1.2))))
+ `(org-level-2 ((t (:foreground ,color-org-level2 :weight bold :height 1.1))))
+ `(org-level-3 ((t (:foreground ,color-org-level3 :weight bold))))
+ `(org-level-4 ((t (:foreground ,color-org-level4 :weight bold))))
+ `(org-level-5 ((t (:foreground ,color-org-level5 :weight bold))))
+ `(org-level-6 ((t (:foreground ,color-org-level6 :weight bold))))
+ `(org-level-7 ((t (:foreground ,color-org-level7 :weight bold))))
+ `(org-level-8 ((t (:foreground ,color-org-level8 :weight bold))))
  `(org-todo ((t (:foreground ,color-error :weight bold))))
  `(org-done ((t (:foreground ,color-main :weight bold))))
+ `(org-headline-done ((t (:foreground ,color-fg-alt :strike-through t))))
  `(org-link ((t (:foreground ,color-link-normal :underline t))))
- `(org-code ((t (:foreground ,color-consquotest))))
- `(org-date ((t (:foreground ,color-built-in :underline t))))
- `(org-block ((t (:foreground ,color-fg :background ,color-bg-2 :extend t))))
- `(org-quote ((t (:foreground ,color-fg :background ,color-bg-2 :extend t))))
+ `(org-checkbox ((t (:foreground ,color-main :weight bold))))
+ `(org-scheduled ((t (:foreground ,color-fg))))
+ `(org-scheduled-today ((t (:foreground ,color-main))))
+ `(org-scheduled-previously ((t (:foreground ,color-warning))))
+ `(org-upcoming-deadline ((t (:foreground ,color-error))))
+ `(org-deadline-announce ((t (:foreground ,color-error :weight bold))))
+ `(org-formula ((t (:foreground ,color-consquotest))))
+ `(org-special-keyword ((t (:foreground ,color-keyword))))
  `(org-table ((t (:foreground ,color-fg-alt))))
+ `(org-date ((t (:foreground ,color-built-in :underline t))))
+ `(org-code ((t (:foreground ,color-consquotest))))
+ `(org-verbatim ((t (:foreground ,color-consquotest :inherit (shadow fixed-pitch)))))
+ `(org-block ((t (:foreground ,color-fg :background ,color-bg-2 :extend t))))
+ `(org-quote ((t (:foreground ,color-fg :background ,color-bg-2 :extend t :slant italic))))
+ `(org-drawer ((t (:foreground ,color-fg-alt))))
+ `(org-tag ((t (:foreground ,color-keyword :weight bold))))
+ `(org-priority ((t (:foreground ,color-warning))))
 
  ;; which-key
  `(which-key-key-face ((t (:foreground ,color-warning))))
