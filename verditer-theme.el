@@ -38,6 +38,25 @@
 
 (deftheme verditer "A vibrant blue-green Verditer Theme.")
 
+(defgroup verditer-theme nil
+  "Verditer theme options."
+  :group 'faces)
+
+(defcustom verditer-vivid-cursor nil
+  "Use a more vivid cursor color."
+  :type 'boolean
+  :group 'verditer-theme)
+
+(defcustom verditer-softer-bg nil
+  "Use a softer background color."
+  :type 'boolean
+  :group 'verditer-theme)
+
+(defcustom verditer-high-contrast nil
+  "Enhance contrast for better readability."
+  :type 'boolean
+  :group 'verditer-theme)
+
 ;; Main background and foreground colors
 (defvar color-bg "#0c1c2c")
 (defvar color-bg-2 "#1a2a3a")
